@@ -61,6 +61,7 @@
 			})
 		})
 
+		//BOTON QUE COPIA LOS VALORES DEL LOS TXT DE USUARIO Y CONTRASEÑA
 		$('#boton').click(function(){
 
 			//COPIAMOS USUARIO Y PASSWORD
@@ -68,7 +69,7 @@
 				userName:$("#userInput").val(),
 				password:$("#passInput").val()
 			}
-
+			//TOMAMOS EL NOMRBE DE USUSARIO COM UNA COOKIE
 			document.cookie = "User="+dataUser.userName;
 
 
@@ -79,7 +80,9 @@
 				url:"http://localhost:8080/auth/login",
 				data:JSON.stringify(dataUser),
 				success:function(data){
+					//GUARDAMOS EL TOKEN EN UNA COOKIE
 					document.cookie = "Token="+data.token
+					//NOS DIRIGIMOS AL MENU
 					location.href="http://localhost:8081/menu"
 				}
 

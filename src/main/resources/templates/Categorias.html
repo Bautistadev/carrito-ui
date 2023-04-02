@@ -131,12 +131,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript">
+    //DAME EL TOKEN GUARDADO EN UN COOKIE
     var cookie = document.cookie.split(";");
 
     let getObjectCookie = function(){
-
+      //RETORNAMOS UN PROMESA DEBIDO AL TARDIO DE LA CONSULTA ASINCRONA
       return new Promise((res,rej)=>{
-
+      //LAS GUARDAMOS EN UN ARRAY
         var data=[]
         cookie.map((e)=>{
           switch(e.split("=")[0].trim()){
@@ -153,6 +154,7 @@
 
       })    
     }
+    //FUNCION QUE GUARDA LAS CATEGORIAS EN LA BD
     let Guardar=function(object,token){
             const toastLiveExample = document.getElementById('liveToast');
             $.ajax({
@@ -161,15 +163,19 @@
                 url:"http://localhost:8080/categoria/categoria",
                 data: JSON.stringify(object),
                 success:function(data){
+                    //CERRAMOS EL MODAL
                     $(`#modalNuevo`).modal("hide");
+                    //MOSTRAMOS UN MENSAJE DE EXITO
                     document.getElementById("ToastLabel").innerText="Categoria guardada con exito"
                     const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
                     toastBootstrap.show()
+                    //RECARGAMOS LA PAGINA
                     setTimeout(()=>{
                         location.href="http://localhost:8081/categorias"
                     },3000)
                 },
                 beforeSend:function(xhr,settings){
+                  //MANDAMOS LA AUTORIZACION
                     xhr.setRequestHeader('Authorization','Bearer '+token)
                 }
             })
@@ -211,6 +217,7 @@
                 data:data[0].User,
                 success:function(userData){
                 userData.roles.map((e)=>{
+                  //EN CASO DE SER UN USUARIO ADMINISTRADOR, QUE MUESTRE LOS DEMAS BOTONES DEL NAVBAR
                     if(e.roleName == 'ROLE_ADMIN'){
                         document.getElementById('btnMarcas').hidden=false;
                         document.getElementById('btnUsuarios').hidden=false;
@@ -234,7 +241,7 @@
                     success:function(dat){
                         dat.map((e)=>{
 
-                            //TABLA
+                            //RELLENAMOS LA TABLA CON TODAS LAS CATEGORIAS
                             let tabla = document.getElementById("tblCategorias");
                             let cuerpo = tabla.getElementsByTagName('tbody')[0];	
                             let fila = cuerpo.insertRow();
@@ -246,6 +253,7 @@
                               padre = null;
                             else  
                               padre = e.padreCategoria.nombre
+                             //INSERTAMOS LAS FILAS 
                             fila.insertCell(0).innerText=nombre
                             fila.insertCell(1).innerText=padre
                             
@@ -266,10 +274,12 @@
                 return data;
             })
             .then((data)=>{
+              //DESPLEGAMOS EL MODAL DE AGREGAR UNAVA CATEGORIA
                 document.getElementById("btnNuevo").onclick=()=>{
                     $('#modalNuevo').modal("show");
                 }
 
+                //GUARDAMOS LA CATEGORIA
                 document.getElementById("btnModalNew").onclick=()=>{
                     var control=true;
                     const toastLiveExample = document.getElementById('liveToast');
@@ -280,6 +290,7 @@
                         padreCategoria:null
                         
                     }
+                    //VERIFICAMOS LOS CAMPOS
                     if(object.nombre === "" || object.nombre === null){
                         document.getElementById("ToastLabel").innerText="Debes ingresar el nombre de la categoria"
                         const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
@@ -289,7 +300,7 @@
                     if(document.getElementById("newCategoria").value !=="null")
                         object.padreCategoria = {id:document.getElementById("newCategoria").value}
 
-
+                    //EN CASO DE TODO CORRECTO GUARDAMOS EN LA BD
                     if(control)
                         Guardar(object,data[1].Token)
 
@@ -298,7 +309,7 @@
             })
     })
 
-
+    //CONFIGURACION DEL BOTON SALIR
     document.getElementById("btnSalir").onclick=()=>{
           document.cookie = "User=";
           document.cookie = "Token=";

@@ -204,13 +204,17 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript">
+
+        //RECUPERAMOS LA COOKIE CON EL TOKEN Y NOMBRE DE USUARIO
         var cookie = document.cookie.split(";");
         let getObjectCookie = function(){
- 
+            //RETORNAMOS UN PROMESA DEBIDO AL TARDIO DE LA CONSULTA ASINCRONA
           return new Promise((res,rej)=>{
  
             var data=[]
+            //RECORREMOS LAS COOKIES
             cookie.map((e)=>{
+                //LAS GUARDAMOS EN UN ARRAY
                switch(e.split("=")[0].trim()){
                     case "User":
                         data.push({"User":e.split("=")[1].trim()});
@@ -227,7 +231,7 @@
         }
 
         
-
+        //FUNCION DE CREA UN VENTA
         let nuevaVenta=function(id,token){
 
             var objVenta={user:{id:id}}
@@ -238,18 +242,23 @@
                 url:"http://localhost:8080/venta/venta",
                 data:JSON.stringify(objVenta),
                 success:function(data){
+                    //LUEGO DE QUE LA VENTA SE GUARDA, DESHABILITAMOS EL BOTON DE GRABAR 
                     document.getElementById("btnGrabar").disabled = true;
                      return data;
                 },
                 beforeSend:function(xhr,settings){
+                    //PASAMOS EL TOKEN PARA PODER INTERACTUAR CON LA BASE DE DATOS
                     xhr.setRequestHeader('Authorization','Bearer '+token)
                 }
             })
             getVentaId.then((data)=>{
+                //CREAMOS UNA 3ER COOKIE PERO CON LOS DATOS DE LA VENTA, ES ESTE CASO EL ID
                document.cookie="nroVenta="+data
+               //HABILOITAMOS PARA PODER CARGAR PRODUCTOS AL CARRITO
                document.getElementById("btnCargar").disabled = false;
             })
         }
+        //FUNCION QUE CREA UN BOTON 
         let crearBoton = function(descripcion,clase){
             boton = document.createElement("button");
             boton.type='button';
@@ -258,6 +267,7 @@
             
             return boton
        }
+       //ESTA FUNCION ELIMINA UN PRODUCTO DEL CARRITO
        let elminar=function(obj,token){
         const toastLiveExample = document.getElementById('liveToast');
         $.ajax({
@@ -266,6 +276,7 @@
                 url:"http://localhost:8080/venta/removeDetalle",
                 data:JSON.stringify(obj),
                 success:function(Data){
+                    //ENVIAMOS UN MENSAJE EN CASO DE QUE TODO SALGA BIEN
                     document.getElementById("ToastLabel").innerText="Producto eliminado"
                     const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
                     toastBootstrap.show()
@@ -275,7 +286,9 @@
                 }
             })
        }
+       //CARGAMOS UN PRODUCTO AL CARRITO
        let cargar=function(cantidad,detalle,nroVenta,token){
+            //CREAMOS EL OBJETO PARA PODER PASARLO POR PARAMETRO POST
             let obj = {
                 cantidad:cantidad,
                 producto:detalle,
@@ -289,12 +302,14 @@
                 url:"http://localhost:8080/venta/addDetalle",
                 data:JSON.stringify(obj),
                 success:function(Data){
-                  
+                    
+                    //TRAEMOS LA TABLA
                     let tabla = document.getElementById("tblDetalle");
                     let cuerpo = tabla.getElementsByTagName('tbody')[0];
+                    //VACIAMOS LA TABLA
                     while(cuerpo.hasChildNodes())
                             cuerpo.removeChild(cuerpo.firstChild);
-                    //TABLA
+                    //RECARGAMOS CON LOS NUEVOS VALORES LA TABLA
                     Data.detalles.map((e)=>{
                         let fila = cuerpo.insertRow();
                         //DATOS
@@ -311,30 +326,38 @@
                         fila.insertCell(3).innerText=marca
                         fila.insertCell(4).innerText=precio
                         fila.insertCell(5).innerText=monto
+                        //CREAMOS EL BOTON DE BORRAR
                         let btnBorrar = crearBoton("X","btn btn-danger")
+                        //LE DAMOS LA ACCION DE BORRAR
                         btnBorrar.onclick = ()=>{
+                            //BORRAMOS EL RPODUCTO DE LA BD
                             elminar(e,token)
+                            //REMOVEMOS LA VISTA DE ESE PRODUCTO
                             cuerpo.removeChild(fila)
                         }
+                        //AGREGAMOS EL BOOTN DE BORRAR
                         fila.insertCell(6).appendChild(btnBorrar)
                         
+                        //ENVIAMOS UN MENSAJE DEL PRODUCTO CARGADO
                         document.getElementById("ToastLabel").innerText="Producto cargardo"
                         const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
                         toastBootstrap.show()
 
+                        //PONEMOS LOS TXT EN VACIO
                         document.getElementById("txtProducto").value= ''
                         document.getElementById("txtCantidad").value=0
                     
                     })
                 },
                 beforeSend:function(xhr,settings){
+                    //PASAMOS EL TOKEN DE AUTORIZACION
                     xhr.setRequestHeader('Authorization','Bearer '+token)
                 }
             })
            
            
        }
-
+       //FUNCION QUE ACCIONA EL MODAL DE BUSQUEDA DE CLIENTES, EN CASO DE ESTAR LOGEADO CON EL ADMINISTRADOR
        let accionModalBuscar = function(buscador,token){
         $.ajax({
             type:"POST",
@@ -343,7 +366,7 @@
             data:buscador,
             success:function(dat){
                 dat.map((e)=>{
-                    //TABLA
+                    //TRAEMOS LA TABLA
                     let tabla = document.getElementById("modalTblUsuarios");
                     let cuerpo = tabla.getElementsByTagName('tbody')[0];
                     //ELIMINAMOS TODOS LO HIJOS 
@@ -362,31 +385,35 @@
                     else
                         rol = "USER";
 
+                    //CREAMOS EL BOTON DE SELECCION
                     let btnInfo=crearBoton("Seleccionar","btn btn-success info")
-    
+                    
+                    //LE DAMOS LA FUNCION DE COPIAR LOS VALORES AL LOS TXT 
                     btnInfo.onclick=()=>{
                         document.getElementById('txtCliente').value = e.userName
                         document.getElementById('txtEmail').value = e.email
                         document.getElementById('txtNombre').value = e.nombre
                         document.getElementById('txtApellido').value = e.apellido
-                        document.getElementById("btnGrabar").onclick=()=>nuevaVenta(e.id,token);
+                        //ESCONDEMOS EL MODAL
                         $("#modalBuscarUsuario").modal("hide")
                     };
                     
+                    //DAMOS LA ACCION DE GRABAR AL BOTON DE GRABAR
                     document.getElementById("btnGrabar").onclick=()=>nuevaVenta(e.id,token);
 
+                    //INSERTAMOS LOS VALORES EN LAS FILAS DE LATABLA
                     fila.insertCell(0).innerText=usuario
                     fila.insertCell(1).innerText=nombre
                     fila.insertCell(2).innerText=apellido
                     fila.insertCell(3).innerText=email
                     fila.insertCell(4).innerText=rol
-                
                     fila.insertCell(5).appendChild(btnInfo);
         
                 })
             
 
             },beforeSend:function(xhr,settings){
+                //PASAMOS TOHEN DE AUTENTICACION
                 xhr.setRequestHeader('Authorization','Bearer '+token)
             }
         })
@@ -428,23 +455,26 @@
                 url:"http://localhost:8080/auth/getUser",
                 data:data[0].User,
                 success:function(userData){
-
+                    //EN CASO DE SER UN USUARIO ADMINISTRADOR, QUE MUESTRE LOS DEMAS BOTONES DEL NAVBAR
                     if(userData.roles.some(item=>item.roleName === "ROLE_ADMIN")){
                         document.getElementById('btnMarcas').hidden=false;
                         document.getElementById('btnUsuarios').hidden=false;
                         document.getElementById('btnCategorias').hidden=false;
-
+                        
+                        //CREAMOS UN EVENTO DEL TECLADO QUE ESCUCHE Y DESPLIEGUE EL MODAL CON LOS DATOS DE LOS USUARIOS
                         document.getElementById("txtCliente").addEventListener("keyup",function(){
-                    
+                            //COPIAMOS LOS DATOS DEL TXT
                             let buscador = document.getElementById("txtCliente").value
                             if(buscador.length > 3){
+                                //DESPLEGAMOS MODAL
                                 $("#modalBuscarUsuario").modal("show")
+                                //INSTANCIAMOS LA ACCION DEL MODAL DE CLIENTES
                                 accionModalBuscar(buscador,data[1].Token)
                             }
                         })
-
-
                     }else{
+                        //SI NO ES UN USUARIO ADMINISTRADOR, NO MOSTRAMOS TODOS LO BOTONES DEL NAVBAR
+                        //PERO SI AUTOMPLETAMOS SUS DATOS PARA LAS COMPRAS
                         document.getElementById('txtCliente').value = userData.userName
                         document.getElementById('txtEmail').value = userData.email
                         document.getElementById('txtNombre').value = userData.nombre
@@ -460,18 +490,22 @@
             return data
         })
         .then((data)=>{
+            //BUSQUEDA DE LOS PRODUCTOS
             document.getElementById("txtProducto").addEventListener("keyup",function(){
                     
                     let buscador = document.getElementById("txtProducto").value
 
                     if(buscador.length > 3){
+                        //DESPLEGAMOS MODAL DE PRODUCTOS
                         $("#modalBuscar").modal("show")
 
                         let tabla = document.getElementById("modalTblProductos");
                         let cuerpo = tabla.getElementsByTagName('tbody')[0];
+                        //BORRAMOS LAS FILAS VIEJAS EN CAS DE TENER
                         while(cuerpo.hasChildNodes())
                              cuerpo.removeChild(cuerpo.firstChild);
                         
+                        //RELLENAMOS LA TABLA
                         $.ajax({
                             type:"POST",
                             contentType:"application/text",
@@ -490,7 +524,7 @@
                                     let btnInfo=crearBoton("Seleccionar","btn btn-success info")
                                     
                                     btnInfo.onclick=()=>{
-                                        
+                                        //COPIAMOS LOS DATOS DE TABLA EN EL TXT DE BUSQUEDA
                                         document.getElementById("txtProducto").value =`${e.nombre} - ${e.categoria.nombre} - ${e.marca.nombre} - $${e.precio}`
                                         $("#modalBuscar").modal("hide")
                                         
@@ -504,7 +538,7 @@
                                         }
                                     }
                                     
-
+                                    //INSERTAMOS VALORES EN FILAS
                                     fila.insertCell(0).innerText=nombre
                                     fila.insertCell(1).innerText=`$${precio}`
                                     fila.insertCell(2).innerText=categoria
@@ -520,11 +554,14 @@
                 })
             })
         })
-        
+    
+        //CONFIGURACION DEL BOTON DE SALIR DE LA SESSION
     document.getElementById("btnSalir").onclick=()=>{
+        //VACIAMOS LAS COOKIE
           document.cookie = "User=";
           document.cookie = "Token=";
 
+          //NOS VAMOS EL LOGIN
           setTimeout(()=>{
             location.href="http://localhost:8081/login"
           },1000)
