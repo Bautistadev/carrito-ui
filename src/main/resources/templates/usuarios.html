@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>usuarios</title>
+<link href="./css/style.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg bg-primary">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="http://localhost:8081/menu">Menu</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="http://localhost:8081/productos">Productos</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="http://localhost:8081/compras">Compras</a>
+                  </li>
+                     <li class="nav-item">
+                    <a class="nav-link" id="btnMarcas" href="http://localhost:8081/marca" hidden="true">Marcas</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="http://localhost:8081/categorias" id="btnCategorias" hidden="true">Categorias</a>
+                  </li>
+                   <li class="nav-item">
+                    <a class="nav-link" id="btnUsuarios" href="http://localhost:8081/usuarios" hidden="true">Usuarios</a>
+                  </li>
+                </ul>
+                <div class="d-flex" style="align-items: center" role="search">
+                  <label style="margin-right: 20px" id="titleUser"></label>
+                  <button class="btn btn-success" id="btnSalir" type="submit">Salir</button>
+                </div>
+              </div>
+            </div>
+          </nav>
+      </header>
+      <section>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <input type="text" id="txtBuscar" class="form-control" placeholder="buscar" >
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="container-fluid" style="text-align: center;background-color: white;">
+            <table class="table table-striped" id="tblUsuarios">
+                <thead>
+                    <tr>
+                        <th>USUARIO</th>
+                        <th>NOMBRE</th>
+                        <th>APELLIDO</th>
+                        <th>EMAIL</th>
+                        <th>ROL</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal fade" id="modalInfo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Información</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body",id="cuerpoModal">
+                    <label id="lblUsuario"></label>
+                    <br>
+                    <label id="lblNombre"></label>
+                    <br>
+                    <label id="lblApellido"></label>
+                    <br>
+                    <label id="lblEmail"></label>
+                    <br>
+                    <label id="lblRol"></label>
+                    <br>
+                    <label id="lblFAlta"></label>
+                    <br>
+                    <label id="lblFBaja"></label>
+                    <br>
+                
+
+                </div>
+                <div class="modal-footer">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="modalNuevo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Nuevo</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body",id="cuerpoModal">
+                    <table class="table table-striped" id="modalTblUsuarios">
+                        <thead>
+                            <tr>
+                                <th>USUARIO</th>
+                                <th>NOMBRE</th>
+                                <th>APELLIDO</th>
+                                <th>EMAIL</th>
+                                <th>ROL</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalNew" type="button" class="btn btn-success">Guardar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header">
+                <strong class="me-auto">Bootstrap</strong>
+                <small>11 mins ago</small>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+              <div class="toast-body">
+                <label id="ToastLabel"></label>
+              </div>
+            </div>
+          </div>
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script> 
+		<script type="text/javascript">
+	var cookie = document.cookie.split(";");
+
+    let getObjectCookie = function(){
+
+      return new Promise((res,rej)=>{
+
+        var data=[]
+        cookie.map((e)=>{
+           switch(e.split("=")[0].trim()){
+                case "User":
+                    data.push({"User":e.split("=")[1].trim()});
+                    break
+                case "Token":
+                    data.push({"Token":e.split("=")[1].trim()});
+                    break
+              
+           }
+         })
+        res(data);
+
+      })    
+    }
+    let crearBoton = function(descripcion,clase){
+        boton = document.createElement("button");
+        boton.type='button';
+        boton.innerText=descripcion
+        boton.className=clase
+        return boton
+    }
+
+    let bajar = function(e,token){
+        const toastLiveExample = document.getElementById('liveToast');
+
+        if(e.fechaBaja == null ){
+            $.ajax({
+                type: "PUT",    
+                contentType:"application/json",
+                url:"http://localhost:8080/auth/bajar",
+                data:JSON.stringify(e),
+                success:function(data) {
+                    document.getElementById("ToastLabel").innerText="Usuario dado de baja"
+                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                    toastBootstrap.show()
+                    setTimeout(()=>{
+                        location.href="http://localhost:8081/usuarios"
+                    },3000)
+                },
+                beforeSend:function(xhr,settings){
+                    xhr.setRequestHeader('Authorization','Bearer '+token)
+                }
+            })
+        }else{
+            document.getElementById("ToastLabel").innerText="El usuario ya fue dado de baja"
+            const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+            toastBootstrap.show()
+        }
+    }
+       let llenarInfo=function(e){
+            document.getElementById('lblUsuario').innerText = `NOMBRE DE USUARIO: ${e.userName}`;
+            document.getElementById('lblNombre').innerText = `NOMBRE: ${e.nombre}`;
+            document.getElementById('lblApellido').innerText = `APELLIDO: ${e.apellido}`;
+            document.getElementById('lblEmail').innerText = `EMAIL: ${e.email}`;
+            if(e.roles.length > 1)
+                document.getElementById('lblRol').innerText = `ROL: ADMIN`;
+            else    
+                document.getElementById('lblRol').innerText = `ROL: USER`;
+            document.getElementById('lblFAlta').innerText = `FECHA DE ALTA: ${e.fechaAlta}`;
+            if(e.fechaBaja == null)
+                document.getElementById('lblFBaja').innerText = `FECHA DE ALTA: (ACTIVO)`;
+            else
+                document.getElementById('lblFBaja').innerText = `FECHA DE ALTA: ${e.fechaBaja}`;
+        }
+        let accionesModal=function(id,e,token){
+            $(`#${id}`).modal("show");
+            llenarInfo(e);
+            $("#modalNuevo").modal("hide")
+       }
+    $(document).ready(function(){
+
+    let User=[]
+
+
+        getObjectCookie()
+        .then((data)=>{    
+            
+            document.getElementById("titleUser").innerText=data[0].User
+            
+            //VERIFICAMOS LA EXISTENCIA DE UN TOKEN   
+            if(data[1].Token == undefined || data[1].Token === '') 
+                location.href = "http://localhost:8081/login"
+            return data
+        })
+        .then((data)=>{
+            //VERIFICAMOS LA VALIDEZ DE ESE TOKEN
+            $.ajax({
+                type:"POST",
+                contentType: "application/text",
+                url:"http://localhost:8080/auth/validateToken",
+                data:data[1].Token,
+                success:function(data){
+                    if(!data)// SI EL TOKEN NO ES VALIDO O EXPIRADO
+                        location.href = "http://localhost:8081/login"
+                }
+            })
+            return data
+        })
+        .then((data)=>{
+            $.ajax({
+                type: "POST",
+                contentType:"application/text",
+                url:"http://localhost:8080/auth/getUser",
+                data:data[0].User,
+                success:function(userData){
+                userData.roles.map((e)=>{
+                    if(e.roleName == 'ROLE_ADMIN'){
+                        document.getElementById('btnMarcas').hidden=false;
+                        document.getElementById('btnUsuarios').hidden=false;
+                        document.getElementById('btnCategorias').hidden=false;
+                    }
+                        
+                })
+                
+                },
+                beforeSend:function(xhr,settings){
+                    xhr.setRequestHeader('Authorization','Bearer '+data[1].Token)
+                }
+            })
+            return data
+        })
+        .then((data)=>{
+            $.ajax({
+                type:"GET",
+                contentType:"application/text",
+                url:"http://localhost:8080/auth/allUsers",
+                success:function(dat){
+                    dat.map((e)=>{
+                        //TABLA
+                        let tabla = document.getElementById("tblUsuarios");
+                        let cuerpo = tabla.getElementsByTagName('tbody')[0];
+                        let fila = cuerpo.insertRow();
+                        //DATOS
+                        let usuario = e.userName;
+                        let nombre = e.nombre;
+                        let apellido = e.apellido;
+                        let email = e.email
+                        let roll
+                        if(e.roles.length > 1)
+                        	rol = "ADMIN";
+                        else
+                        	rol = "USER";
+
+                        let btnInfo=crearBoton("info","btn btn-success info")
+                        let btnEliminar=crearBoton("Bajar","btn btn-danger")
+
+                        btnInfo.onclick=()=>accionesModal("modalInfo",e,data[1].Token);
+                        btnEliminar.onclick=()=>bajar(e,data[1].Token)
+                        
+                        fila.insertCell(0).innerText=usuario
+                        fila.insertCell(1).innerText=nombre
+                        fila.insertCell(2).innerText=apellido
+                        fila.insertCell(3).innerText=email
+                        fila.insertCell(4).innerText=rol
+                    
+                        fila.insertCell(5).appendChild(btnInfo);
+                        fila.insertCell(5).appendChild(btnEliminar);
+                    })
+                
+
+                },beforeSend:function(xhr,settings){
+                    xhr.setRequestHeader('Authorization','Bearer '+data[1].Token)
+                }
+                
+            })
+
+            return data;
+        })
+        .then((data)=>{
+            document.getElementById("txtBuscar").addEventListener("keyup",function(){
+            let buscador = document.getElementById("txtBuscar").value
+            if(buscador.length > 3){
+                $("#modalNuevo").modal("show")
+                $.ajax({
+                    type:"POST",
+                    contentType:"application/text",
+                    url:"http://localhost:8080/auth/buscarPalabraClave",
+                    data:buscador,
+                    success:function(dat){
+                        dat.map((e)=>{
+                            //TABLA
+                            let tabla = document.getElementById("modalTblUsuarios");
+                            let cuerpo = tabla.getElementsByTagName('tbody')[0];
+                            //ELIMINAMOS TODOS LO HIJOS 
+                            while(cuerpo.hasChildNodes())
+	                            cuerpo.removeChild(cuerpo.firstChild);	
+                            //AGREGAMOS FILA
+                            let fila = cuerpo.insertRow();
+                            //DATOS
+                            let usuario = e.userName;
+                            let nombre = e.nombre;
+                            let apellido = e.apellido;
+                            let email = e.email
+                            let roll
+                            if(e.roles.length > 1)
+                                rol = "ADMIN";
+                            else
+                                rol = "USER";
+
+                            let btnInfo=crearBoton("info","btn btn-success info")
+                            let btnEliminar=crearBoton("Bajar","btn btn-danger")
+
+                            btnInfo.onclick=()=>accionesModal("modalInfo",e,data[1].Token);
+                            btnEliminar.onclick=()=>bajar(e,data[1].Token)
+                            
+                            fila.insertCell(0).innerText=usuario
+                            fila.insertCell(1).innerText=nombre
+                            fila.insertCell(2).innerText=apellido
+                            fila.insertCell(3).innerText=email
+                            fila.insertCell(4).innerText=rol
+                        
+                            fila.insertCell(5).appendChild(btnInfo);
+                            fila.insertCell(5).appendChild(btnEliminar);
+                        })
+                    
+
+                    },beforeSend:function(xhr,settings){
+                        xhr.setRequestHeader('Authorization','Bearer '+data[1].Token)
+                    }
+                })
+                }
+            })
+        })
+       	document.getElementById("btnSalir").onclick=()=>{
+            document.cookie = "User=";
+            document.cookie = "Token=";
+
+            setTimeout(()=>{
+              location.href="http://localhost:8081/login"
+            },1000)
+          }
+
+    })
+
+
+	</script>
+</body>
+</html>

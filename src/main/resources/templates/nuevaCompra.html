@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="./css/style.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+</head>
+<body>
+    <header>
+        <nav class="navbar bg-primary navbar-expand-lg  ">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="http://localhost:8081/menu">Menu</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="http://localhost:8081/productos">Productos</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="http://localhost:8081/compras">Compras</a>
+                  </li>
+                     <li class="nav-item">
+                    <a class="nav-link" id="btnMarcas" href="http://localhost:8081/marca" hidden="true">Marcas</a>
+                  </li>
+                  <li class="nav-item">
+                      <a class="nav-link" id="btnCategorias" href="http://localhost:8081/categorias" hidden="true">Categorias</a>
+                    </li>
+                   <li class="nav-item">
+                    <a class="nav-link" id="btnUsuarios" href="http://localhost:8081/usuarios" hidden="true">Usuarios</a>
+                  </li>
+                </ul>
+                <div class="d-flex" style="align-items: center" role="search">
+                  <label style="margin-right: 20px" id="titleUser"></label>
+                  <button class="btn btn-success" id="btnSalir"type="submit">Salir</button>
+                </div>
+              </div>
+            </div>
+          </nav>
+      </header>
+      <section>
+        <div class="container" style="text-align: center;">
+            <h2>DATOS</h2>
+        </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="row" style="text-align: center;">
+                    <div class="col-sm-3">
+                        <Label>Cliente/Usuario</Label>
+                    </div>
+                    <div class="col-sm-5">
+                        <Label>Email</Label>
+                    </div>
+                    <div class="col-sm-2">
+                        <Label>Nombre</Label>
+                    </div>
+                    <div class="col-sm-2">
+                        <Label>Apellido</Label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <input type="text" class="form-control"placeholder="Ingresa el cliente" id="txtCliente">
+                </div>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control"placeholder="Ingresa el cliente" id="txtEmail">
+                </div>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control"placeholder="Ingresa el cliente" id="txtNombre">
+                </div>
+                <div class="col-sm-2">
+                    <input type="text" class="form-control"placeholder="Ingresa el cliente" id="txtApellido">
+                </div>
+            </div>
+            <br>
+
+            <div class="row" style="text-align: center;">
+                <div class="col-sm-12">
+                    <input type="button" class="btn btn-success form-control" value="GRABAR" id="btnGrabar">        
+                </div>
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="container-fluid" style="text-align: center;">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>Cantidad</label>
+                </div>
+                <div class="col-sm-10">
+                    <label>Producto</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <input type="number" class="form-control" value="0" id="txtCantidad" min="0">
+                </div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control"id="txtProducto" placeholder="BuscarProducto">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <input type="button" value="CARGAR" disabled="true" class="btn btn-primary form-control" id="btnCargar">
+            </div>
+        </div>
+        <br>
+        <br>
+        <div class="container-fluid" style="background-color: white;">
+            <div class="row">
+                <table class="table table-striped" id="tblDetalle" style="text-align: center;">
+                    <thead>
+                        <tr>
+                            <th>CANTIDAD</th>
+                            <th>PRODUCTO</th>
+                            <th>CATEGORIA</th>
+                            <th>MARCA</th>
+                            <th>PRECIO</th>
+                            <th>MONTO TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+        <br>
+        <div class="container-fluid" style="text-align: center;">
+            <a type="button" value="Terminar" href="http://localhost:8081/compras" class="btn btn-success" >Terminar</a>
+        </div>
+        <div class="modal fade" id="modalBuscar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Modificar</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body",id="cuerpoModal">
+                    <table class="table table-striped" id="modalTblProductos">
+                        <thead>
+                            <tr>
+                                <th>NOMBRE</th>
+                                <th>PRECIO</th>
+                                <th>CATEGORIA</th>
+                                <th>MARCA</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalMod" type="button" class="btn btn-warning">Modificar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" id="modalBuscarUsuario" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Nuevo</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body",id="cuerpoModal">
+                    <table class="table table-striped" id="modalTblUsuarios">
+                        <thead>
+                            <tr>
+                                <th>USUARIO</th>
+                                <th>NOMBRE</th>
+                                <th>APELLIDO</th>
+                                <th>EMAIL</th>
+                                <th>ROL</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalNew" type="button" class="btn btn-success">Guardar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header">
+                <strong class="me-auto">Bootstrap</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+              <div class="toast-body">
+                <label id="ToastLabel"></label>
+              </div>
+            </div>
+          </div>
+      </section>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+        var cookie = document.cookie.split(";");
+        let getObjectCookie = function(){
+ 
+          return new Promise((res,rej)=>{
+ 
+            var data=[]
+            cookie.map((e)=>{
+               switch(e.split("=")[0].trim()){
+                    case "User":
+                        data.push({"User":e.split("=")[1].trim()});
+                        break
+                    case "Token":
+                        data.push({"Token":e.split("=")[1].trim()});
+                        break
+                  
+               }
+             })
+            res(data);
+ 
+          })    
+        }
+
+        
+
+        let nuevaVenta=function(id,token){
+
+            var objVenta={user:{id:id}}
+
+            let getVentaId = $.ajax({
+                type:"POST",
+                contentType: "application/Json",
+                url:"http://localhost:8080/venta/venta",
+                data:JSON.stringify(objVenta),
+                success:function(data){
+                    document.getElementById("btnGrabar").disabled = true;
+                     return data;
+                },
+                beforeSend:function(xhr,settings){
+                    xhr.setRequestHeader('Authorization','Bearer '+token)
+                }
+            })
+            getVentaId.then((data)=>{
+               document.cookie="nroVenta="+data
+               document.getElementById("btnCargar").disabled = false;
+            })
+        }
+        let crearBoton = function(descripcion,clase){
+            boton = document.createElement("button");
+            boton.type='button';
+            boton.innerText=descripcion
+            boton.className=clase
+            
+            return boton
+       }
+       let elminar=function(obj,token){
+        const toastLiveExample = document.getElementById('liveToast');
+        $.ajax({
+                type: "POST",
+                contentType:"application/Json",
+                url:"http://localhost:8080/venta/removeDetalle",
+                data:JSON.stringify(obj),
+                success:function(Data){
+                    document.getElementById("ToastLabel").innerText="Producto eliminado"
+                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                    toastBootstrap.show()
+                },
+                beforeSend:function(xhr,settings){
+                    xhr.setRequestHeader('Authorization','Bearer '+token)
+                }
+            })
+       }
+       let cargar=function(cantidad,detalle,nroVenta,token){
+            let obj = {
+                cantidad:cantidad,
+                producto:detalle,
+                venta:{id:nroVenta}
+            }
+            const toastLiveExample = document.getElementById('liveToast');
+            if(obj.cantidad !== 0 || obj.producto !== null || obj.venta !==null)
+            $.ajax({
+                type: "POST",
+                contentType:"application/Json",
+                url:"http://localhost:8080/venta/addDetalle",
+                data:JSON.stringify(obj),
+                success:function(Data){
+                  
+                    let tabla = document.getElementById("tblDetalle");
+                    let cuerpo = tabla.getElementsByTagName('tbody')[0];
+                    while(cuerpo.hasChildNodes())
+                            cuerpo.removeChild(cuerpo.firstChild);
+                    //TABLA
+                    Data.detalles.map((e)=>{
+                        let fila = cuerpo.insertRow();
+                        //DATOS
+                        let cantidad = e.cantidad
+                        let nombre = e.producto.nombre;
+                        let precio = e.producto.precio;
+                        let categoria = e.producto.categoria.nombre
+                        let marca = e.producto.marca.nombre
+                        let monto = e.cantidad*e.producto.precio
+
+                        fila.insertCell(0).innerText=cantidad
+                        fila.insertCell(1).innerText=nombre
+                        fila.insertCell(2).innerText=categoria
+                        fila.insertCell(3).innerText=marca
+                        fila.insertCell(4).innerText=precio
+                        fila.insertCell(5).innerText=monto
+                        let btnBorrar = crearBoton("X","btn btn-danger")
+                        btnBorrar.onclick = ()=>{
+                            elminar(e,token)
+                            cuerpo.removeChild(fila)
+                        }
+                        fila.insertCell(6).appendChild(btnBorrar)
+                        
+                        document.getElementById("ToastLabel").innerText="Producto cargardo"
+                        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                        toastBootstrap.show()
+
+                        document.getElementById("txtProducto").value= ''
+                        document.getElementById("txtCantidad").value=0
+                    
+                    })
+                },
+                beforeSend:function(xhr,settings){
+                    xhr.setRequestHeader('Authorization','Bearer '+token)
+                }
+            })
+           
+           
+       }
+
+       let accionModalBuscar = function(buscador,token){
+        $.ajax({
+            type:"POST",
+            contentType:"application/text",
+            url:"http://localhost:8080/auth/buscarPalabraClave",
+            data:buscador,
+            success:function(dat){
+                dat.map((e)=>{
+                    //TABLA
+                    let tabla = document.getElementById("modalTblUsuarios");
+                    let cuerpo = tabla.getElementsByTagName('tbody')[0];
+                    //ELIMINAMOS TODOS LO HIJOS 
+                    while(cuerpo.hasChildNodes())
+                        cuerpo.removeChild(cuerpo.firstChild);	
+                    //AGREGAMOS FILA
+                    let fila = cuerpo.insertRow();
+                    //DATOS
+                    let usuario = e.userName;
+                    let nombre = e.nombre;
+                    let apellido = e.apellido;
+                    let email = e.email
+                    let roll
+                    if(e.roles.length > 1)
+                        rol = "ADMIN";
+                    else
+                        rol = "USER";
+
+                    let btnInfo=crearBoton("Seleccionar","btn btn-success info")
+    
+                    btnInfo.onclick=()=>{
+                        document.getElementById('txtCliente').value = e.userName
+                        document.getElementById('txtEmail').value = e.email
+                        document.getElementById('txtNombre').value = e.nombre
+                        document.getElementById('txtApellido').value = e.apellido
+                        document.getElementById("btnGrabar").onclick=()=>nuevaVenta(e.id,token);
+                        $("#modalBuscarUsuario").modal("hide")
+                    };
+                    
+                    document.getElementById("btnGrabar").onclick=()=>nuevaVenta(e.id,token);
+
+                    fila.insertCell(0).innerText=usuario
+                    fila.insertCell(1).innerText=nombre
+                    fila.insertCell(2).innerText=apellido
+                    fila.insertCell(3).innerText=email
+                    fila.insertCell(4).innerText=rol
+                
+                    fila.insertCell(5).appendChild(btnInfo);
+        
+                })
+            
+
+            },beforeSend:function(xhr,settings){
+                xhr.setRequestHeader('Authorization','Bearer '+token)
+            }
+        })
+
+       }
+
+        $(document).ready(function(){
+
+        let User=[]
+
+        getObjectCookie()
+        .then((data)=>{    
+            
+            document.getElementById("titleUser").innerText=data[0].User
+            
+            //VERIFICAMOS LA EXISTENCIA DE UN TOKEN   
+            if(data[1].Token == undefined || data[1].Token === '') 
+                location.href = "http://localhost:8081/login"
+            return data
+        })
+        .then((data)=>{
+            //VERIFICAMOS LA VALIDEZ DE ESE TOKEN
+            $.ajax({
+                type:"POST",
+                contentType: "application/text",
+                url:"http://localhost:8080/auth/validateToken",
+                data:data[1].Token,
+                success:function(data){
+                    if(!data)// SI EL TOKEN NO ES VALIDO O EXPIRADO
+                        location.href = "http://localhost:8081/login"
+                }
+            })
+            return data
+        })
+        .then((data)=>{
+            $.ajax({
+                type: "POST",
+                contentType:"application/text",
+                url:"http://localhost:8080/auth/getUser",
+                data:data[0].User,
+                success:function(userData){
+
+                    if(userData.roles.some(item=>item.roleName === "ROLE_ADMIN")){
+                        document.getElementById('btnMarcas').hidden=false;
+                        document.getElementById('btnUsuarios').hidden=false;
+                        document.getElementById('btnCategorias').hidden=false;
+
+                        document.getElementById("txtCliente").addEventListener("keyup",function(){
+                    
+                            let buscador = document.getElementById("txtCliente").value
+                            if(buscador.length > 3){
+                                $("#modalBuscarUsuario").modal("show")
+                                accionModalBuscar(buscador,data[1].Token)
+                            }
+                        })
+
+
+                    }else{
+                        document.getElementById('txtCliente').value = userData.userName
+                        document.getElementById('txtEmail').value = userData.email
+                        document.getElementById('txtNombre').value = userData.nombre
+                        document.getElementById('txtApellido').value = userData.apellido
+                        document.getElementById("btnGrabar").onclick=()=>nuevaVenta(userData.id,data[1].Token);
+                    }
+                    
+                },
+                beforeSend:function(xhr,settings){
+                    xhr.setRequestHeader('Authorization','Bearer '+data[1].Token)
+                }
+            })
+            return data
+        })
+        .then((data)=>{
+            document.getElementById("txtProducto").addEventListener("keyup",function(){
+                    
+                    let buscador = document.getElementById("txtProducto").value
+
+                    if(buscador.length > 3){
+                        $("#modalBuscar").modal("show")
+
+                        let tabla = document.getElementById("modalTblProductos");
+                        let cuerpo = tabla.getElementsByTagName('tbody')[0];
+                        while(cuerpo.hasChildNodes())
+                             cuerpo.removeChild(cuerpo.firstChild);
+                        
+                        $.ajax({
+                            type:"POST",
+                            contentType:"application/text",
+                            url:"http://localhost:8080/producto/producto/pclave",
+                            data:buscador,
+                            success:function(dat){
+                                dat.map((e)=>{
+                                    //TABLA
+                                    let fila = cuerpo.insertRow();
+
+                                    //DATOS
+                                    let nombre = e.nombre;
+                                    let precio = e.precio;
+                                    let categoria = e.categoria.nombre
+                                    let marca = e.marca.nombre
+                                    let btnInfo=crearBoton("Seleccionar","btn btn-success info")
+                                    
+                                    btnInfo.onclick=()=>{
+                                        
+                                        document.getElementById("txtProducto").value =`${e.nombre} - ${e.categoria.nombre} - ${e.marca.nombre} - $${e.precio}`
+                                        $("#modalBuscar").modal("hide")
+                                        
+                                        document.getElementById("btnCargar").onclick=()=>{
+                                            
+                                            let cantidad = document.getElementById("txtCantidad").value;
+                                            let nroVenta =document.cookie.split(";")[2].split("=")[1]
+                                            
+                                             cargar(cantidad,e,nroVenta,data[1].Token)
+                                            
+                                        }
+                                    }
+                                    
+
+                                    fila.insertCell(0).innerText=nombre
+                                    fila.insertCell(1).innerText=`$${precio}`
+                                    fila.insertCell(2).innerText=categoria
+                                    fila.insertCell(3).innerText=marca
+                                    fila.insertCell(4).appendChild(btnInfo);
+                                })
+                            },beforeSend:function(xhr,settings){
+                                xhr.setRequestHeader('Authorization','Bearer '+data[1].Token)
+                            }
+                            
+                        })
+                    }
+                })
+            })
+        })
+        
+    document.getElementById("btnSalir").onclick=()=>{
+          document.cookie = "User=";
+          document.cookie = "Token=";
+
+          setTimeout(()=>{
+            location.href="http://localhost:8081/login"
+          },1000)
+        }
+</script>
+</html>

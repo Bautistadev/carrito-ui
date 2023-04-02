@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link href="./css/style.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+
+</head>
+<body >    
+    <header>
+      <nav class="navbar bg-primary navbar-expand-lg  ">
+		  <div class="container-fluid">
+		    <a class="navbar-brand" href="http://localhost:8081/menu">Menu</a>
+		    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		      <span class="navbar-toggler-icon"></span>
+		    </button>
+		    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+		        <li class="nav-item">
+		          <a class="nav-link active" aria-current="page" href="http://localhost:8081/productos">Productos</a>
+		        </li>
+		        <li class="nav-item">
+		          <a class="nav-link" href="http://localhost:8081/compras">Compras</a>
+		        </li>
+   		        <li class="nav-item">
+		          <a class="nav-link" id="btnMarcas" href="http://localhost:8081/marca" hidden="true">Marcas</a>
+		        </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="btnCategorias" href="http://localhost:8081/categorias" hidden="true">Categorias</a>
+                  </li>
+    		     <li class="nav-item">
+		          <a class="nav-link" id="btnUsuarios" href="http://localhost:8081/usuarios" hidden="true">Usuarios</a>
+		        </li>
+		      </ul>
+		      <div class="d-flex" style="align-items: center" role="search">
+		        <label style="margin-right: 20px" id="titleUser"></label>
+		        <button class="btn btn-success" id="btnSalir"type="submit">Salir</button>
+		      </div>
+		    </div>
+		  </div>
+		</nav>
+    </header>
+    <section>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-2">
+                    <input type="button" id="btnNuevo" hidden=true class="btn btn-primary form-control" value="nuevo">
+                </div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="txtBuscar"placeholder="buscar" >
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="container-fluid" style="text-align: center; background-color: white;">
+            <table class="table table-striped" id="tblProductos">
+                <thead >
+                    <tr>
+                        <th>NOMBRE</th>
+                        <th>PRECIO</th>
+                        <th>CATEGORIA</th>
+                        <th>MARCA</th>
+                        <th>ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal fade" id="modalInfo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Información</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body",id="cuerpoModal">
+                    <label id="lblNombre"></label>
+                    <br>
+                    <label id="lblPrecio"></label>
+                    <br>
+                    <label id="lblCategoria"></label>
+                    <br>
+                    <label id="lblMarca"></label>
+                    <br>
+
+                </div>
+                <div class="modal-footer">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="modalMod" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Modificar</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body",id="cuerpoModal">
+
+                    <label>NOMBRE:</label>
+                    <input type="text" class="form-control" id="inNombre">
+                    <br>
+                    <label>PRECIO:$</label>
+                    <input type="number" class="form-control" id="inPrecio">
+                    <br>
+                    <label>CATEGORIA:</label>
+                    <select type="text" class="form-control" id="inCategoria">
+                        <option id="opCategoria">SELECCIONE UNA CATEGORIA</option>
+                    </select>
+                    <br>
+                    <label>MARCA:</label>
+                    <select type="text" class="form-control" id="inMarca">
+                        <option id="opMarca">SELECCIONE UNA MARCA</option>
+                    </select>
+                    <br>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalMod" type="button" class="btn btn-warning">Modificar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="modalBuscar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Modificar</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body",id="cuerpoModal">
+                    <table class="table table-striped" id="modalTblProductos">
+                        <thead>
+                            <tr>
+                                <th>NOMBRE</th>
+                                <th>PRECIO</th>
+                                <th>CATEGORIA</th>
+                                <th>MARCA</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalMod" type="button" class="btn btn-warning">Modificar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal fade" id="modalNuevo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Nuevo</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body",id="cuerpoModal">
+
+                    <label>NOMBRE:</label>
+                    <input type="text" class="form-control" id="newNombre">
+                    <br>
+                    <label>PRECIO:$</label>
+                    <input type="number" class="form-control" id="newPrecio">
+                    <br>
+                    <label>CATEGORIA:</label>
+                    <select type="text" class="form-control" id="newCategoria">
+                        <option id="opCategoria">SELECCIONE UNA CATEGORIA</option>
+                    </select>
+                    <br>
+                    <label>MARCA:</label>
+                    <select type="text" class="form-control" id="newMarca">
+                        <option id="opMarca">SELECCIONE UNA MARCA</option>
+                    </select>
+                    <br>
+
+                </div>
+                <div class="modal-footer">
+                    <button id="btnModalNew" type="button" class="btn btn-success">Guardar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+              <div class="toast-header">
+                <strong class="me-auto">Bootstrap</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>
+              <div class="toast-body">
+                <label id="ToastLabel"></label>
+              </div>
+            </div>
+          </div>
+
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+	<script type="text/javascript">
+       var cookie = document.cookie.split(";");
+
+       let getObjectCookie = function(){
+
+         return new Promise((res,rej)=>{
+
+           var data=[]
+           cookie.map((e)=>{
+              switch(e.split("=")[0].trim()){
+                   case "User":
+                       data.push({"User":e.split("=")[1].trim()});
+                       break
+                   case "Token":
+                       data.push({"Token":e.split("=")[1].trim()});
+                       break
+                 
+              }
+            })
+           res(data);
+
+         })    
+       }
+
+       let crearBoton = function(descripcion,clase){
+            boton = document.createElement("button");
+            boton.type='button';
+            boton.innerText=descripcion
+            boton.className=clase
+            if(clase=="btn btn-warning war" || clase == "btn btn-danger dan")
+                boton.hidden=true
+            return boton
+       }
+
+       let llenarInfo=function(e){
+            document.getElementById('lblNombre').innerText = `NOMBRE: ${e.nombre}`;
+            document.getElementById('lblPrecio').innerText = `PRECIO: $${e.precio}`;
+            document.getElementById('lblCategoria').innerText = `CATEGORIA: ${e.categoria.nombre}`;
+            document.getElementById('lblMarca').innerText = `MARCA: ${e.marca.nombre}`;
+        }
+        let cargarCategoria=function(select,data){
+            $.ajax({
+                type: "GET",    
+                contentType:"application/json",
+                url:"http://localhost:8080/categoria/getAllCategorias",
+                success:function(data) {
+                    
+                    data.map((e)=>{
+                        let option = document.createElement("option");
+                        option.value = e.id
+                        option.innerText= e.nombre
+                        select.appendChild(option)
+                        
+                    })
+                },
+                beforeSend:function(xhr,settings){
+                    xhr.setRequestHeader('Authorization','Bearer '+data[1].Token)
+                }
+            })
+        }
+        let cargarMarca=function(select,data){
+            $.ajax({
+                type: "GET",    
+                contentType:"application/json",
+                url:"http://localhost:8080/marca/getAllMarcas",
+                success:function(data) {
+                    
+                    data.map((e)=>{
+                        let option = document.createElement("option");
+                        option.value = e.id
+                        option.innerText= e.nombre
+                        select.appendChild(option)
+                        
+                    })
+                },
+                beforeSend:function(xhr,settings){
+                    xhr.setRequestHeader('Authorization','Bearer '+data[1].Token)
+                }
+            })
+        }
+        let llenarMod=function(e,token){
+            document.getElementById('inNombre').value=e.nombre;
+            document.getElementById('inPrecio').value= e.precio;
+            document.getElementById('inCategoria').value= e.categoria.nombre
+            document.getElementById('inMarca').value = e.marca.nombre;
+
+            Modificar(e.id,token);
+
+
+        }
+       let accionesModal=function(id,e,token){
+            $(`#${id}`).modal("show");
+            if(id === "modalInfo"){
+                llenarInfo(e);
+                $("#modalBuscar").modal("hide")
+            } else
+                llenarMod(e,token)
+       }
+
+       let Modificar=function(id,token){
+            document.getElementById("btnModalMod").onclick=()=>{
+
+                const toastLiveExample = document.getElementById('liveToast');
+
+                var object={
+                    id:id,
+                    nombre:document.getElementById("inNombre").value,
+                    precio:document.getElementById("inPrecio").value,
+                    categoria:{
+                        id:document.getElementById("inCategoria").value
+                    },
+                    marca:{
+                        id:document.getElementById("inMarca").value
+                    }
+                }
+                 console.log(JSON.stringify(object))
+                 $.ajax({
+                    type:"PUT",
+                    contentType: "application/json",
+                    url:"http://localhost:8080/producto/updateProducto",
+                    data: JSON.stringify(object),
+                    success:function(data){
+                        $(`#modalMod`).modal("hide");
+                        document.getElementById("ToastLabel").innerText="Producto actualizado con exito"
+                        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                        toastBootstrap.show()
+                        setTimeout(()=>{
+                            location.href="http://localhost:8081/productos"
+                        },3000)
+                    },
+                    beforeSend:function(xhr,settings){
+                        xhr.setRequestHeader('Authorization','Bearer '+token)
+                    }
+                })
+
+                
+            }
+       }
+       let Guardar=function(object,token){
+            const toastLiveExample = document.getElementById('liveToast');
+            $.ajax({
+                type:"POST",
+                contentType: "application/json",
+                url:"http://localhost:8080/producto/producto",
+                data: JSON.stringify(object),
+                success:function(data){
+                    $(`#modalNuevo`).modal("hide");
+                    document.getElementById("ToastLabel").innerText="Producto guardado con exito"
+                    const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                    toastBootstrap.show()
+                    setTimeout(()=>{
+                        location.href="http://localhost:8081/productos"
+                    },3000)
+                },
+                beforeSend:function(xhr,settings){
+                    xhr.setRequestHeader('Authorization','Bearer '+token)
+                }
+            })
+       }
+
+       $(document).ready(function(){
+
+            let User=[]
+
+
+            getObjectCookie()
+            .then((data)=>{    
+                
+                document.getElementById("titleUser").innerText=data[0].User
+                
+                //VERIFICAMOS LA EXISTENCIA DE UN TOKEN   
+                if(data[1].Token == undefined || data[1].Token === '') 
+                    location.href = "http://localhost:8081/login"
+                return data
+            })
+            .then((data)=>{
+                //VERIFICAMOS LA VALIDEZ DE ESE TOKEN
+                $.ajax({
+                    type:"POST",
+                    contentType: "application/text",
+                    url:"http://localhost:8080/auth/validateToken",
+                    data:data[1].Token,
+                    success:function(data){
+                        if(!data)// SI EL TOKEN NO ES VALIDO O EXPIRADO
+                            location.href = "http://localhost:8081/login"
+                    }
+                })
+                return data
+            })
+            .then((data)=>{
+                $.ajax({
+                    type: "POST",
+                    contentType:"application/text",
+                    url:"http://localhost:8080/auth/getUser",
+                    data:data[0].User,
+                    success:function(userData){
+                    userData.roles.map((e)=>{
+                        if(e.roleName == 'ROLE_ADMIN'){
+                            document.getElementById('btnMarcas').hidden=false;
+                            document.getElementById('btnUsuarios').hidden=false;
+                            document.getElementById('btnCategorias').hidden=false;
+                        }
+                            
+                    })
+                    
+                    },
+                    beforeSend:function(xhr,settings){
+                        xhr.setRequestHeader('Authorization','Bearer '+data[1].Token)
+                    }
+                })
+                return data
+            })
+            .then((data)=>{
+                $.ajax({
+                    type:"GET",
+                    contentType:"application/text",
+                    url:"http://localhost:8080/producto/getAllProducto",
+                    success:function(dat){
+                        dat.map((e)=>{
+
+                            console.log("token -> "+data[1].Token);
+                            //TABLA
+                            let tabla = document.getElementById("tblProductos");
+                            let cuerpo = tabla.getElementsByTagName('tbody')[0];	
+                            let fila = cuerpo.insertRow();
+
+                            //DATOS
+                            let nombre = e.nombre;
+                            let precio = e.precio;
+                            let categoria = e.categoria.nombre
+                            let marca = e.marca.nombre
+                            let btnModificar=crearBoton("modificar","btn btn-warning war")
+                            let btnInfo=crearBoton("info","btn btn-success info")
+                            
+                            btnInfo.onclick=()=>accionesModal("modalInfo",e,data[1].Token);
+                            btnModificar.onclick=()=>accionesModal("modalMod",e,data[1].Token);
+                            
+
+                            
+                            fila.insertCell(0).innerText=nombre
+                            fila.insertCell(1).innerText=`$${precio}`
+                            fila.insertCell(2).innerText=categoria
+                            fila.insertCell(3).innerText=marca
+                            
+                        
+                            fila.insertCell(4).appendChild(btnInfo);
+                            fila.insertCell(4).appendChild(btnModificar);
+
+                        })
+                        //CARGAMOS LOS SELECT DEL MODAL DE MODIFICAR
+                        cargarCategoria(document.getElementById('inCategoria'),data)
+                        cargarMarca(document.getElementById('inMarca'),data)
+
+                    },beforeSend:function(xhr,settings){
+                        xhr.setRequestHeader('Authorization','Bearer '+data[1].Token)
+                    }
+                    
+                })
+
+                return data;
+            })
+            .then((data)=>{
+                $.ajax({
+                    type: "POST",
+                    contentType:"application/text",
+                    url:"http://localhost:8080/auth/getUser",
+                    data:data[0].User,
+                    success:function(userData){
+                    userData.roles.map((e)=>{
+                        if(e.roleName == 'ROLE_ADMIN'){
+                            let botonesWar=document.getElementsByClassName('war')
+                            for (var i=0;i<botonesWar.length;i++){
+                                botonesWar[i].hidden=false;
+                            }
+
+                         	 let botonesDan=document.getElementsByClassName('dan')
+                           	 for (var i=0;i<botonesDan.length;i++)
+                              	botonesDan[i].hidden=false
+                             document.getElementById('btnNuevo').hidden=false;
+                        }
+                            
+                    })
+                    
+                    },
+                    beforeSend:function(xhr,settings){
+                    xhr.setRequestHeader('Authorization','Bearer '+data[1].Token)
+                    }
+                })
+                return data
+            })
+            .then((data)=>{
+                document.getElementById("btnNuevo").onclick=()=>{
+                    $('#modalNuevo').modal("show");
+                    cargarCategoria(document.getElementById('newCategoria'),data)
+                    cargarMarca(document.getElementById('newMarca'),data)
+                }
+
+                document.getElementById("btnModalNew").onclick=()=>{
+                    var control=true;
+                    const toastLiveExample = document.getElementById('liveToast');
+                    var object={
+                        nombre:document.getElementById("newNombre").value,
+                        precio:document.getElementById("newPrecio").value,
+                        categoria:{
+                            id:document.getElementById("newCategoria").value
+                        },
+                        marca:{
+                            id:document.getElementById("newMarca").value
+                        }
+                    
+                    }
+                    if(isNaN(object.categoria.id)){
+                        document.getElementById("ToastLabel").innerText="Debes elegir una categoria"
+                        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                        toastBootstrap.show()
+                        control=false
+                    }
+                    if(isNaN(object.marca.id)){
+                        document.getElementById("ToastLabel").innerText="Debes elegir una marca"
+                        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                        toastBootstrap.show()
+                        control=false
+                    }
+                    if(object.nombre === "" || object.nombre === null){
+                        document.getElementById("ToastLabel").innerText="Debes ingresar el nombre del producto"
+                        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                        toastBootstrap.show()
+                        control=false
+                    }
+
+                    if(object.precio === ""){
+                        document.getElementById("ToastLabel").innerText="Debes ingresar el precio del producto"
+                        const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample)
+                        toastBootstrap.show()
+                        control=false
+                    }
+
+                    if(control)
+                        Guardar(object,data[1].Token)
+
+                }
+                return data;
+            })
+            .then((data)=>{
+                document.getElementById("txtBuscar").addEventListener("keyup",function(){
+                    
+                    let buscador = document.getElementById("txtBuscar").value
+
+                    if(buscador.length > 3){
+                        $("#modalBuscar").modal("show")
+
+                        let tabla = document.getElementById("modalTblProductos");
+                        let cuerpo = tabla.getElementsByTagName('tbody')[0];
+                        while(cuerpo.hasChildNodes())
+                             cuerpo.removeChild(cuerpo.firstChild);
+                        
+                        $.ajax({
+                            type:"POST",
+                            contentType:"application/text",
+                            url:"http://localhost:8080/producto/producto/pclave",
+                            data:buscador,
+                            success:function(dat){
+                                dat.map((e)=>{
+                                    //TABLA
+
+                                    
+                                    let fila = cuerpo.insertRow();
+
+                                    //DATOS
+                                    let nombre = e.nombre;
+                                    let precio = e.precio;
+                                    let categoria = e.categoria.nombre
+                                    let marca = e.marca.nombre
+                                    let btnInfo=crearBoton("info","btn btn-success info")
+                                    
+                                    btnInfo.onclick=()=>accionesModal("modalInfo",e,data[1].Token);
+                                    
+
+                                    
+                                    fila.insertCell(0).innerText=nombre
+                                    fila.insertCell(1).innerText=`$${precio}`
+                                    fila.insertCell(2).innerText=categoria
+                                    fila.insertCell(3).innerText=marca
+                                    
+                                
+                                    fila.insertCell(4).appendChild(btnInfo);
+
+                                })
+                                //CARGAMOS LOS SELECT DEL MODAL DE MODIFICAR
+                                cargarCategoria(document.getElementById('inCategoria'),data)
+                                cargarMarca(document.getElementById('inMarca'),data)
+
+                            },beforeSend:function(xhr,settings){
+                                xhr.setRequestHeader('Authorization','Bearer '+data[1].Token)
+                            }
+                            
+                        })
+                    }
+                })
+            })
+        })
+        document.getElementById("btnSalir").onclick=()=>{
+          document.cookie = "User=";
+          document.cookie = "Token=";
+
+          setTimeout(()=>{
+            location.href="http://localhost:8081/login"
+          },1000)
+        }
+
+    </script>
+</body>
+</html>
